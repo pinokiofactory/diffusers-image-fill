@@ -115,7 +115,7 @@ def resize(image, size):
 with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
         prompt = gr.Textbox(value="high quality", label="Prompt", visible=False)
-        original_size = gr.Textbox(label="original size", visible=False)
+        original_size = gr.Textbox(label="original size", visible=False, interactive=False)
         size = gr.Number(value=1024, precision=0, label="Resize")
         run_button = gr.Button("Generate")
 
