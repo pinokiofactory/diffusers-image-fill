@@ -65,7 +65,7 @@ def fill_image(prompt, image, model_selection):
     cnet_image = source.copy()
     cnet_image.paste(0, (0, 0), binary_mask)
 
-    print(f"image {image}, cnet_image={cnet_image}")
+    print(f"prompt={prompt}, image {image}, cnet_image={cnet_image}")
     (
         prompt_embeds,
         negative_prompt_embeds,
