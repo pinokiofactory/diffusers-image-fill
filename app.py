@@ -84,6 +84,7 @@ def fill_image(prompt, image, model_selection):
         yield image, cnet_image
 
     image = image.convert("RGBA")
+    print(f"AFTER image {image}, cnet_image={cnet_image}")
     cnet_image.paste(image, (0, 0), binary_mask)
 
     yield source, cnet_image
@@ -101,7 +102,7 @@ def resize(image, size):
     source.thumbnail((size, size), Image.LANCZOS)
     print(f"resized image={source}")
     w, h = global_image.size
-    return source, gr.update(visible=True, value=f"{w} x {h}")
+    return source, gr.update(visible=True), gr.update(visible=True, value=f"{w} x {h}")
 
 
 #css = """
@@ -116,7 +117,7 @@ with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
         prompt = gr.Textbox(value="high quality", label="Prompt", visible=False)
         original_size = gr.Textbox(label="original size", visible=False, interactive=False)
-        size = gr.Number(value=1024, precision=0, label="Resize")
+        size = gr.Number(value=1024, precision=0, label="Resize", visible=False, interactive=True)
         run_button = gr.Button("Generate")
 
     with gr.Row():
@@ -149,8 +150,8 @@ with gr.Blocks(fill_width=True) as demo:
         inputs=[prompt, input_image, model_selection],
         outputs=result,
     )
-    input_image.upload(fn=resize, inputs=[input_image, size], outputs=[input_image, original_size])
-    size.change(fn=resize, inputs=[input_image, size], outputs=[input_image, original_size])
+    input_image.upload(fn=resize, inputs=[input_image, size], outputs=[input_image, size, original_size])
+    size.change(fn=resize, inputs=[input_image, size], outputs=[input_image, size, original_size])
 
 
 demo.launch(share=False)
