@@ -96,12 +96,18 @@ def clear_result():
 
 def resize(image, size):
     global global_image
-    size = int(size)
+    size = (int(size) // 8) * 8
     if global_image is None:
         global_image = image["background"]
     source = global_image.copy()
     print(f"source image={source}")
     source.thumbnail((size, size), Image.LANCZOS)
+
+    resized_w, resized_h = source.size
+    resized_w = (resized_w // 8) * 8
+    resized_h = (resized_h // 8) * 8
+    source = source.crop((0, 0, resized_w, resized_h))
+
     print(f"resized image={source}")
     w, h = global_image.size
 #            canvas_size=(1024, 1024),
