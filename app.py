@@ -57,7 +57,6 @@ def init():
 #@spaces.GPU(duration=16)
 def fill_image(prompt, image, model_selection):
     init()
-    print(f"image {image}")
     source = image["background"]
     mask = image["layers"][0]
 
@@ -66,6 +65,7 @@ def fill_image(prompt, image, model_selection):
     cnet_image = source.copy()
     cnet_image.paste(0, (0, 0), binary_mask)
 
+    print(f"image {image}, cnet_image={cnet_image}")
     (
         prompt_embeds,
         negative_prompt_embeds,
