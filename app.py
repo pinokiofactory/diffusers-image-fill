@@ -102,7 +102,8 @@ def resize(image, size):
     source.thumbnail((size, size), Image.LANCZOS)
     print(f"resized image={source}")
     w, h = global_image.size
-    return source, gr.update(visible=True), gr.update(visible=True, value=f"{w} x {h}")
+#            canvas_size=(1024, 1024),
+    return gr.update(value=source, canvas_size=(w,h)), gr.update(visible=True), gr.update(visible=True, value=f"{w} x {h}")
 
 
 #css = """
@@ -125,7 +126,7 @@ with gr.Blocks(fill_width=True) as demo:
             type="pil",
             label="Input Image",
 #            crop_size=(1024, 1024),
-            canvas_size=(1024, 1024),
+#            canvas_size=(1024, 1024),
             layers=False,
             sources=["upload"],
         )
