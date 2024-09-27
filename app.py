@@ -94,11 +94,13 @@ def fill_image(prompt, image, model_selection):
 def clear_result():
     return gr.update(value=None)
 
+def set_img(image):
+    global global_image
+    global_image = image["background"]
+
 def resize(image, size):
     global global_image
     size = (int(size) // 8) * 8
-    if global_image is None:
-        global_image = image["background"]
     source = global_image.copy()
     print(f"source image={source}")
     source.thumbnail((size, size), Image.LANCZOS)
@@ -160,7 +162,7 @@ with gr.Blocks(fill_width=True) as demo:
         inputs=[prompt, input_image, model_selection],
         outputs=result,
     )
-    input_image.upload(fn=resize, inputs=[input_image, size], outputs=[input_image, size])
+    input_image.upload(fn=set_img, inputs=input_image).then(fn=resize, inputs=[input_image, size], outputs=[input_image, size])
     size.change(fn=resize, inputs=[input_image, size], outputs=[input_image, size])
 
 
