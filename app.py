@@ -16,6 +16,7 @@ MODELS = {
 }
 DEVICE = devicetorch.get(torch)
 pipe = None
+global_image = None
 def init():
     global pipe
 
@@ -91,13 +92,15 @@ def fill_image(prompt, image, model_selection):
 def clear_result():
     return gr.update(value=None)
 
-def resize(image):
-    print(f"resize image={image}")
-    source = image["background"]
-    image["background"].thumbnail((1024, 1024), Image.LANCZOS)
-    print(f"resized image={image}")
-    return image["background"]
-
+def resize(image, size):
+    global global_image
+    if global_image is None:
+        global_image = image["background"]
+    source = global_image.copy()
+    print(f"source image={source}")
+    source.thumbnail((size, size), Image.LANCZOS)
+    print(f"resized image={source}")
+    return source
 
 
 #css = """
@@ -111,6 +114,7 @@ def resize(image):
 with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
         prompt = gr.Textbox(value="high quality", label="Prompt", visible=False)
+        size = gr.Number(value=1024, precision=0, label="Resize")
         run_button = gr.Button("Generate")
 
     with gr.Row():
@@ -143,7 +147,8 @@ with gr.Blocks(fill_width=True) as demo:
         inputs=[prompt, input_image, model_selection],
         outputs=result,
     )
-    input_image.upload(fn=resize, inputs=input_image, outputs=input_image)
+    input_image.upload(fn=resize, inputs=[input_image, size], outputs=input_image)
+    size.change(fn=resize, inputs=[input_image, size], outputs=input_image)
 
 
 demo.launch(share=False)
