@@ -126,7 +126,7 @@ def resize(image, size):
 #with gr.Blocks(css=css, fill_width=True) as demo:
 with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
-        prompt = gr.Textbox(value="high quality", label="Prompt")
+        prompt = gr.Textbox(value="high quality", label="Prompt", visible=False)
         size = gr.Slider(value=1024, label="Resize", minimum=0, maximum=1024, step=8, visible=False, interactive=True)
         run_button = gr.Button("Generate")
 
