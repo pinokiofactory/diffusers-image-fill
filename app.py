@@ -96,6 +96,7 @@ def clear_result():
 
 def resize(image, size):
     global global_image
+    size = int(size)
     if global_image is None:
         global_image = image["background"]
     source = global_image.copy()
@@ -120,7 +121,7 @@ def resize(image, size):
 with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
         prompt = gr.Textbox(value="high quality", label="Prompt", visible=False)
-        size = gr.Slider(value=1024, precision=0, label="Resize", minimum=0, maximum=1024, step=8, visible=False, interactive=True)
+        size = gr.Slider(value=1024, label="Resize", minimum=0, maximum=1024, step=8, visible=False, interactive=True)
         run_button = gr.Button("Generate")
 
     with gr.Row():
