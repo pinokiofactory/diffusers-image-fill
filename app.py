@@ -83,8 +83,9 @@ def fill_image(prompt, image, model_selection):
     ):
         yield image, cnet_image
 
+    print(f"AFTER1 image {image}, cnet_image={cnet_image}")
     image = image.convert("RGBA")
-    print(f"AFTER image {image}, cnet_image={cnet_image}")
+    print(f"AFTER2 image {image}, cnet_image={cnet_image}")
     cnet_image.paste(image, (0, 0), binary_mask)
 
     yield source, cnet_image
