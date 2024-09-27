@@ -104,7 +104,9 @@ def resize(image, size):
     print(f"resized image={source}")
     w, h = global_image.size
 #            canvas_size=(1024, 1024),
-    return gr.update(value=source, canvas_size=(w,h)), gr.update(visible=True), gr.update(visible=True, value=f"{w} x {h}")
+    
+    max = (w // 8) * 8
+    return gr.update(value=source, canvas_size=(w,h)), gr.update(maximum=max, visible=True)
 
 
 #css = """
@@ -118,8 +120,7 @@ def resize(image, size):
 with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
         prompt = gr.Textbox(value="high quality", label="Prompt", visible=False)
-        original_size = gr.Textbox(label="original size", visible=False, interactive=False)
-        size = gr.Number(value=1024, precision=0, label="Resize", visible=False, interactive=True)
+        size = gr.Slider(value=1024, precision=0, label="Resize", minimum=0, maximum=1024, step=8, visible=False, interactive=True)
         run_button = gr.Button("Generate")
 
     with gr.Row():
@@ -152,8 +153,8 @@ with gr.Blocks(fill_width=True) as demo:
         inputs=[prompt, input_image, model_selection],
         outputs=result,
     )
-    input_image.upload(fn=resize, inputs=[input_image, size], outputs=[input_image, size, original_size])
-    size.change(fn=resize, inputs=[input_image, size], outputs=[input_image, size, original_size])
+    input_image.upload(fn=resize, inputs=[input_image, size], outputs=[input_image, size])
+    size.change(fn=resize, inputs=[input_image, size], outputs=[input_image, size])
 
 
 demo.launch(share=False)
