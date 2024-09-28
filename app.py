@@ -130,10 +130,6 @@ def resize(image, size):
 #with gr.Blocks(css=css, fill_width=True) as demo:
 with gr.Blocks(fill_width=True) as demo:
     with gr.Row():
-        prompt = gr.Textbox(value="high quality", label="Prompt (Don't touch unless you know what you're doing)")
-        size = gr.Slider(value=1024, label="Resize", minimum=0, maximum=1024, step=8, visible=False, interactive=True)
-        guidance_scale = gr.Number(value=1.5, label="Guidance Scale", visible=False)
-        steps = gr.Number(value=8, label="Steps", precision=0, visible=False)
         run_button = gr.Button("Generate")
 
     with gr.Row():
@@ -151,11 +147,16 @@ with gr.Blocks(fill_width=True) as demo:
             label="Generated Image",
         )
 
-    model_selection = gr.Dropdown(
-        choices=list(MODELS.keys()),
-        value="RealVisXL V5.0 Lightning",
-        label="Model",
-    )
+    with gr.Row():
+      model_selection = gr.Dropdown(
+          choices=list(MODELS.keys()),
+          value="RealVisXL V5.0 Lightning",
+          label="Model",
+      )
+      prompt = gr.Textbox(value="high quality", label="Prompt (Don't touch unless you know what you're doing)")
+      size = gr.Slider(value=1024, label="Resize", minimum=0, maximum=1024, step=8, visible=False, interactive=True)
+      guidance_scale = gr.Number(value=1.5, label="Guidance Scale", visible=False)
+      steps = gr.Number(value=8, label="Steps", precision=0, visible=False)
 
     run_button.click(
         fn=clear_result,
