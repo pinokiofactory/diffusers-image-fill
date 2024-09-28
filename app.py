@@ -65,7 +65,6 @@ def fill_image(prompt, image, model_selection, guidance_scale, steps):
     cnet_image = source.copy()
     cnet_image.paste(0, (0, 0), binary_mask)
 
-    print(f"prompt={prompt}, image {image}, cnet_image={cnet_image}")
     (
         prompt_embeds,
         negative_prompt_embeds,
@@ -85,9 +84,7 @@ def fill_image(prompt, image, model_selection, guidance_scale, steps):
     ):
         yield image, cnet_image
 
-    print(f"AFTER1 image {image}, cnet_image={cnet_image}")
     image = image.convert("RGBA")
-    print(f"AFTER2 image {image}, cnet_image={cnet_image}")
     cnet_image.paste(image, (0, 0), binary_mask)
 
     yield source, cnet_image
@@ -104,7 +101,6 @@ def resize(image, size):
     global global_image
     size = (int(size) // 8) * 8
     source = global_image.copy()
-    print(f"source image={source}")
     source.thumbnail((size, size), Image.LANCZOS)
 
     resized_w, resized_h = source.size
@@ -112,7 +108,6 @@ def resize(image, size):
     resized_h = (resized_h // 8) * 8
     source = source.crop((0, 0, resized_w, resized_h))
 
-    print(f"resized image={source}")
     w, h = global_image.size
 #            canvas_size=(1024, 1024),
     
