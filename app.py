@@ -117,7 +117,7 @@ def resize(image, size):
 #            canvas_size=(1024, 1024),
     
     max = (w // 8) * 8
-    return gr.update(value=source, canvas_size=(w,h)), gr.update(maximum=max, visible=True), gr.update(visible=True), gr.update(visible=True)
+    return gr.update(value=source, canvas_size=(w,h)), gr.update(maximum=max, visible=True), gr.update(visible=True), gr.update(visible=True), gr.update(visible=True)
 
 
 #css = """
@@ -153,7 +153,7 @@ with gr.Blocks(fill_width=True) as demo:
           value="RealVisXL V5.0 Lightning",
           label="Model",
       )
-      prompt = gr.Textbox(value="high quality", label="Prompt (Don't touch unless you know what you're doing)")
+      prompt = gr.Textbox(value="high quality", label="Prompt (Don't touch unless you know what you're doing)", visible=False)
       size = gr.Slider(value=1024, label="Resize", minimum=0, maximum=1024, step=8, visible=False, interactive=True)
       guidance_scale = gr.Number(value=1.5, label="Guidance Scale", visible=False)
       steps = gr.Number(value=8, label="Steps", precision=0, visible=False)
@@ -167,8 +167,8 @@ with gr.Blocks(fill_width=True) as demo:
         inputs=[prompt, input_image, model_selection, guidance_scale, steps],
         outputs=result,
     )
-    input_image.upload(fn=set_img, inputs=input_image).then(fn=resize, inputs=[input_image, size], outputs=[input_image, size, guidance_scale, steps])
-    size.change(fn=resize, inputs=[input_image, size], outputs=[input_image, size, guidance_scale, steps])
+    input_image.upload(fn=set_img, inputs=input_image).then(fn=resize, inputs=[input_image, size], outputs=[input_image, size, guidance_scale, steps, prompt])
+    size.change(fn=resize, inputs=[input_image, size], outputs=[input_image, size, guidance_scale, steps, prompt])
 
 
 demo.launch(share=False)
