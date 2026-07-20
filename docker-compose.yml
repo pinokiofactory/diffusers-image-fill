@@ -1,0 +1,38 @@
+services:
+  diffusers-image-fill:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: diffusers-image-fill
+    container_name: diffusers-image-fill
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./:/app/diffusers-image-fill
+    stop_signal: SIGKILL
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+    restart: unless-stopped
+    #Delete below if you're not using a reverse proxy
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.diffusers-image-fill.rule=Host(`image-fill.local.example.com`)"
+      - "traefik.http.routers.diffusers-image-fill.entrypoints=https"
+      - "traefik.http.routers.diffusers-image-fill.tls=true"
+      - "traefik.http.routers.diffusers-image-fill.tls.certresolver=cloudflare"
+      - "traefik.http.services.diffusers-image-fill.loadbalancer.server.port=7860"
+      - "traefik.http.routers.diffusers-image-fill.middlewares=default-headers@file"
+networks:
+  traefik:
+    external: true
